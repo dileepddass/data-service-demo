@@ -4,3 +4,73 @@ GET {{DataService.API_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+# --- Cart API ---
+
+# Create a new cart
+POST {{DataService.API_HostAddress}}/api/carts
+Content-Type: application/json
+
+{
+  "customerName": "David Brown",
+  "status": "Active"
+}
+
+###
+
+# List all carts
+GET {{DataService.API_HostAddress}}/api/carts
+Accept: application/json
+
+###
+
+# Search carts by customer name
+GET {{DataService.API_HostAddress}}/api/carts?customerName=Alice
+Accept: application/json
+
+###
+
+# Search carts by status
+GET {{DataService.API_HostAddress}}/api/carts?status=Active
+Accept: application/json
+
+###
+
+# View a single cart with line items
+GET {{DataService.API_HostAddress}}/api/carts/1
+Accept: application/json
+
+###
+
+# Update cart metadata
+PUT {{DataService.API_HostAddress}}/api/carts/1
+Content-Type: application/json
+
+{
+  "customerName": "Alice Johnson",
+  "status": "Active"
+}
+
+###
+
+# Add a line item to a cart
+POST {{DataService.API_HostAddress}}/api/carts/1/lineitems
+Content-Type: application/json
+
+{
+  "product": "USB-C Cable",
+  "quantity": 3,
+  "unitPrice": 12.99
+}
+
+###
+
+# Delete a line item from a cart
+DELETE {{DataService.API_HostAddress}}/api/carts/1/lineitems/2
+
+###
+
+# Delete a cart
+DELETE {{DataService.API_HostAddress}}/api/carts/4
+
+###
