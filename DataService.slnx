@@ -1,0 +1,6 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/DataService.API/DataService.API.csproj" />
+    <Project Path="src/DataService.UI/DataService.UI.csproj" />
+  </Folder>
+</Solution>
