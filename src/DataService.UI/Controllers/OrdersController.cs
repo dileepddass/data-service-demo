@@ -14,10 +14,42 @@ public class OrdersController : Controller
     }
 
     // GET /Orders
-    public async Task<IActionResult> Index()
+    public async Task<IActionResult> Index(string? search, int page = 1, int pageSize = 5)
     {
-        var orders = await _orderService.GetAllAsync();
-        return View(orders);
+        if (page < 1) page = 1;
+        if (pageSize < 1) pageSize = 5;
+
+        var allOrders = (await _orderService.GetAllAsync()).ToList();
+
+        var filtered = string.IsNullOrWhiteSpace(search)
+            ? allOrders
+            : allOrders.Where(o =>
+                o.CustomerName.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                o.Product.Contains(search, StringComparison.OrdinalIgnoreCase) ||
+                o.Status.Contains(search, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+        var totalCount = filtered.Count;
+        var totalPages = pageSize > 0 ? (int)Math.Ceiling(totalCount / (double)pageSize) : 0;
+
+        if (totalPages > 0 && page > totalPages)
+            page = totalPages;
+
+        var pagedOrders = filtered
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToList();
+
+        var viewModel = new OrderListViewModel
+        {
+            Orders = pagedOrders,
+            Search = search,
+            Page = page,
+            PageSize = pageSize,
+            TotalCount = totalCount
+        };
+
+        return View(viewModel);
     }
 
     // GET /Orders/Details/5
